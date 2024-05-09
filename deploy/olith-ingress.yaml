@@ -1,0 +1,73 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    nginx.ingress.kubernetes.io/proxy-body-size: 1024m
+    traefik.ingress.kubernetes.io/transport.respondingTimeouts.idleTimeout: "600"
+    traefik.ingress.kubernetes.io/transport.respondingTimeouts.readTimeout: "600"
+    traefik.ingress.kubernetes.io/transport.respondingTimeouts.writeTimeout: "600"
+  name: cheshire-cat-ingress
+  namespace: nuvolaris
+spec:
+  rules:
+  - host: cat.example.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: /admin
+        backend:
+          service:
+            name: cheshire-cat-core
+            port:
+              number: 1865
+      ## FOR CAT
+      #- pathType: Prefix
+      #  path: /ws
+      #  backend:
+      #    service:
+      #      name: cheshire-cat-core
+      #      port:
+      #        number: 1865
+      #- pathType: Prefix
+      #  path: /public
+      #  backend:
+      #    service:
+      #      name: cheshire-cat-core
+      #      port:
+      #        number: 1865
+      #- pathType: Prefix
+      #  path: /plugins
+      #  backend:
+      #    service:
+      #      name: cheshire-cat-core
+      #      port:
+      #        number: 1865
+      #- pathType: Prefix
+      #  path: /plugins/*
+      #  backend:
+      #    service:
+      #      name: cheshire-cat-core
+      #      port:
+      #        number: 1865
+      #- pathType: Prefix
+      #  path: /embedder
+      #  backend:
+      #    service:
+      #      name: cheshire-cat-core
+      #      port:
+      #        number: 1865
+      #- pathType: Prefix
+      #  path: /llm
+      #  backend:
+      #    service:
+      #      name: cheshire-cat-core
+      #      port:
+      #        number: 1865
+      #- pathType: Prefix
+      #  path: /memory
+      #  backend:
+      #    service:
+      #      name: cheshire-cat-core
+      #      port:
+      #        number: 1865

@@ -1,0 +1,38 @@
+version: 3
+
+dotenv:
+  - .env
+
+vars:
+  HOSTNAME: $HOSTNAME
+
+tasks:
+
+  config:show:
+    desc: show config
+    cmds:
+    - echo .env
+    - echo "------------------"
+    - echo "HOST {{.HOSTNAME}}"
+    - echo "NUV_PWD $NUV_PWD"
+    - echo "NUV_TMP $NUV_TMP"
+
+  build:only:
+    desc: only build
+    cmds:
+    - mkdir -p $NUV_TMP/_olith 
+    - kompose convert -n nuvolaris -f $NUV_PWD/docker-compose.yml  --out $NUV_TMP/_olith
+
+  deploy:
+    desc: deploy
+    dir: 
+    cmds:
+    - mkdir -p $NUV_TMP/_olith 
+    - kompose convert -n nuvolaris -f $NUV_PWD/docker-compose.yml  --out $NUV_TMP/_olith
+    - kubectl apply -f $NUV_TMP/out -f $NUV_PWD/olaris-olith/deploy
+
+  undeploy:
+    desc: undeploy
+    cmds:
+    - kubectl delete -f $NUV_TMP/_olith -f $NUV_PWD/olaris-olith/deploy
+    - rm -r $NUV_TMP/_olith
